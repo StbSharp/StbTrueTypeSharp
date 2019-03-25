@@ -24,6 +24,9 @@ namespace StbTrueTypeSharp
 		public static readonly CharacterRange Katakana =
 			new CharacterRange((char)0x30A0, (char)0x30FF);
 
+		public static readonly CharacterRange Greek =
+			new CharacterRange((char)0x0370, (char)0x03FF);
+
 		public char Start
 		{
 			get;

@@ -4,10 +4,29 @@ using System.Linq;
 
 namespace StbTrueTypeSharp
 {
-	public static unsafe class TtfFontBaker
+	public unsafe class FontBaker
 	{
-		public static TtfFontBakerResult Bake(byte[] ttf, float fontPixelHeight,
-			int bitmapWidth, int bitmapHeight,
+		private byte[] _bitmap;
+		private StbTrueType.stbtt_pack_context _context;
+		private Dictionary<int, GlyphInfo> _glyphs;
+		private int bitmapWidth, bitmapHeight;
+
+		public void Begin(int width, int height)
+		{
+			bitmapWidth = width;
+			bitmapHeight = height;
+			_bitmap = new byte[width * height];
+			_context = new StbTrueType.stbtt_pack_context();
+
+			fixed (byte* pixelsPtr = _bitmap)
+			{
+				StbTrueType.stbtt_PackBegin(_context, pixelsPtr, width, height, width, 1, null);
+			}
+
+			_glyphs = new Dictionary<int, GlyphInfo>();
+		}
+
+		public void Add(byte[] ttf, float fontPixelHeight,
 			IEnumerable<CharacterRange> characterRanges)
 		{
 			if (ttf == null || ttf.Length == 0)
@@ -16,12 +35,6 @@ namespace StbTrueTypeSharp
 			if (fontPixelHeight <= 0)
 				throw new ArgumentOutOfRangeException(nameof(fontPixelHeight));
 
-			if (bitmapWidth <= 0)
-				throw new ArgumentOutOfRangeException(nameof(bitmapWidth));
-
-			if (bitmapHeight <= 0)
-				throw new ArgumentOutOfRangeException(nameof(bitmapHeight));
-
 			if (characterRanges == null)
 				throw new ArgumentNullException(nameof(characterRanges));
 
@@ -29,7 +42,6 @@ namespace StbTrueTypeSharp
 				throw new ArgumentException("characterRanges must have a least one value.");
 
 			byte[] pixels;
-			var glyphs = new Dictionary<int, GlyphInfo>();
 			fixed (byte* ttfPtr = ttf)
 			{
 				var fontInfo = new StbTrueType.stbtt_fontinfo();
@@ -41,14 +53,6 @@ namespace StbTrueTypeSharp
 				int ascent, descent, lineGap;
 				StbTrueType.stbtt_GetFontVMetrics(fontInfo, &ascent, &descent, &lineGap);
 
-				pixels = new byte[bitmapWidth * bitmapHeight];
-				var pc = new StbTrueType.stbtt_pack_context();
-				fixed (byte* pixelsPtr = pixels)
-				{
-					StbTrueType.stbtt_PackBegin(pc, pixelsPtr, bitmapWidth,
-						bitmapHeight, bitmapWidth, 1, null);
-				}
-
 				foreach (var range in characterRanges)
 				{
 					if (range.Start > range.End)
@@ -57,7 +61,7 @@ namespace StbTrueTypeSharp
 					var cd = new StbTrueType.stbtt_packedchar[range.End - range.Start + 1];
 					fixed (StbTrueType.stbtt_packedchar* chardataPtr = cd)
 					{
-						StbTrueType.stbtt_PackFontRange(pc, ttfPtr, 0, fontPixelHeight,
+						StbTrueType.stbtt_PackFontRange(_context, ttfPtr, 0, fontPixelHeight,
 							range.Start,
 							range.End - range.Start + 1,
 							chardataPtr);
@@ -79,12 +83,16 @@ namespace StbTrueTypeSharp
 							XAdvance = (int)Math.Round(cd[i].xadvance)
 						};
 
-						glyphs[(char)(i + range.Start)] = glyphInfo;
+						_glyphs[(char)(i + range.Start)] = glyphInfo;
 					}
 				}
 			}
 
-			return new TtfFontBakerResult(glyphs, fontPixelHeight, pixels, bitmapWidth, bitmapHeight);
+		}
+
+		public FontBakerResult End()
+		{
+			return new FontBakerResult(_glyphs, _bitmap, bitmapWidth, bitmapHeight);
 		}
 	}
 }

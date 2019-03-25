@@ -3,22 +3,15 @@ using System.Collections.Generic;
 
 namespace StbTrueTypeSharp
 {
-	public class TtfFontBakerResult
+	public class FontBakerResult
 	{
-		public TtfFontBakerResult(Dictionary<int, GlyphInfo> glyphs,
-			float fontPixelHeight,
-			byte[] pixels,
-			int width,
-			int height)
+		public FontBakerResult(Dictionary<int, GlyphInfo> glyphs, byte[] bitmap, int width, int height)
 		{
 			if (glyphs == null)
 				throw new ArgumentNullException(nameof(glyphs));
 
-			if (fontPixelHeight <= 0)
-				throw new ArgumentOutOfRangeException(nameof(fontPixelHeight));
-
-			if (pixels == null)
-				throw new ArgumentNullException(nameof(pixels));
+			if (bitmap == null)
+				throw new ArgumentNullException(nameof(bitmap));
 
 			if (width <= 0)
 				throw new ArgumentOutOfRangeException(nameof(width));
@@ -26,12 +19,11 @@ namespace StbTrueTypeSharp
 			if (height <= 0)
 				throw new ArgumentOutOfRangeException(nameof(height));
 
-			if (pixels.Length < width * height)
+			if (bitmap.Length < width * height)
 				throw new ArgumentException("pixels.Length should be higher than width * height");
 
 			Glyphs = glyphs;
-			FontFontPixelHeight = fontPixelHeight;
-			Pixels = pixels;
+			Bitmap = bitmap;
 			Width = width;
 			Height = height;
 		}
@@ -41,12 +33,7 @@ namespace StbTrueTypeSharp
 			get;
 		}
 
-		public float FontFontPixelHeight
-		{
-			get;
-		}
-
-		public byte[] Pixels
+		public byte[] Bitmap
 		{
 			get;
 		}
