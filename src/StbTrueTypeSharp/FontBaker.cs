@@ -41,7 +41,6 @@ namespace StbTrueTypeSharp
 			if (!characterRanges.Any())
 				throw new ArgumentException("characterRanges must have a least one value.");
 
-			byte[] pixels;
 			fixed (byte* ttfPtr = ttf)
 			{
 				var fontInfo = new StbTrueType.stbtt_fontinfo();
