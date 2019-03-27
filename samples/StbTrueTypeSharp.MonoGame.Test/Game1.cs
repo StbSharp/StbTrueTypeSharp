@@ -8,15 +8,15 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace StbSharp.MonoGame.WindowsDX.Test
+namespace StbSharp.MonoGame.Test
 {
 	/// <summary>
 	/// This is the main type for your game.
 	/// </summary>
 	public class Game1 : Game
 	{
-		private const int FontBitmapWidth = 1024;
-		private const int FontBitmapHeight = 1024;
+		private const int FontBitmapWidth = 8192;
+		private const int FontBitmapHeight = 8192;
 
 		GraphicsDeviceManager _graphics;
 		SpriteBatch _spriteBatch;
@@ -40,25 +40,34 @@ namespace StbSharp.MonoGame.WindowsDX.Test
 
 		private void LoadFont()
 		{
-			var buffer = File.ReadAllBytes("Fonts/DroidSans.ttf");
-			var buffer2 = File.ReadAllBytes("Fonts/DroidSansJapanese.ttf");
-
 			var fontBaker = new FontBaker();
 
 			fontBaker.Begin(FontBitmapWidth, FontBitmapHeight);
-			fontBaker.Add(buffer, 32, new[]
+			fontBaker.Add(File.ReadAllBytes("Fonts/DroidSans.ttf"), 32, new[]
 			{
 				CharacterRange.BasicLatin,
 				CharacterRange.Latin1Supplement,
 				CharacterRange.LatinExtendedA,
 				CharacterRange.Cyrillic,
-				CharacterRange.Greek
+				CharacterRange.Greek,
 			});
 
-			fontBaker.Add(buffer2, 32, new[]
+			fontBaker.Add(File.ReadAllBytes("Fonts/DroidSansJapanese.ttf"), 32, new[]
 			{
 				CharacterRange.Hiragana,
-				CharacterRange.Katakana
+				CharacterRange.Katakana,
+			});
+
+			fontBaker.Add(File.ReadAllBytes("Fonts/ZCOOLXiaoWei-Regular.ttf"), 32, new[]
+			{
+				CharacterRange.CjkSymbolsAndPunctuation,
+				CharacterRange.CjkUnifiedIdeographs
+			});
+
+			fontBaker.Add(File.ReadAllBytes("Fonts/KoPubBatang-Regular.ttf"), 32, new[]
+			{
+				CharacterRange.HangulCompatibilityJamo,
+				CharacterRange.HangulSyllables
 			});
 
 			var _charData = fontBaker.End();
@@ -174,7 +183,7 @@ namespace StbSharp.MonoGame.WindowsDX.Test
 		{
 			GraphicsDevice.Clear(Color.CornflowerBlue);
 
-			_spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+			_spriteBatch.Begin();
 
 			// Draw alphabet for all common languages.
 			_spriteBatch.DrawString(_font, "Eng: A a B b C c D d E e F f G g H h I i J j K k L l M m N n O o P p Q q R r S s T t U u V v W w X x Y y Z z",
@@ -196,8 +205,7 @@ namespace StbSharp.MonoGame.WindowsDX.Test
 			_spriteBatch.DrawString(_font, "Other symbols: Ñ ñ ¿ ¡ Ç ç á ê Ä ä à â Ö ö ô Ü ü ë ß ẞ Ÿ ÿ Œ Æ æ ï Ğ ğ Ş ş Ő ő Ű ű ù",
 				new Vector2(0, 240), Color.Moccasin);
 
-			_spriteBatch.Draw(_font.Texture, new Vector2(0, 300));
-
+			// _spriteBatch.Draw(_font.Texture, new Vector2(0, 300));
 
 			_spriteBatch.End();
 

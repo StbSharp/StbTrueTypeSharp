@@ -82,7 +82,7 @@ namespace StbTrueTypeSharp
 							XAdvance = (int)Math.Round(cd[i].xadvance)
 						};
 
-						_glyphs[(char)(i + range.Start)] = glyphInfo;
+						_glyphs[i + range.Start] = glyphInfo;
 					}
 				}
 			}
