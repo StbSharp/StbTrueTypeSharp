@@ -1,6 +1,11 @@
 namespace StbTrueTypeSharp
 {
-	public struct GlyphInfo
+#if !STBSHARP_INTERNAL
+	public
+#else
+	internal
+# endif
+	struct GlyphInfo
 	{
 		public int X, Y, Width, Height;
 		public int XOffset, YOffset;

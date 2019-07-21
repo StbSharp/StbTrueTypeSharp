@@ -1,6 +1,11 @@
 namespace StbTrueTypeSharp
 {
-	public struct CharacterRange
+#if !STBSHARP_INTERNAL
+	public
+#else
+	internal
+#endif
+	struct CharacterRange
 	{
 		public static readonly CharacterRange BasicLatin = new CharacterRange(0x0020, 0x007F);
 		public static readonly CharacterRange Latin1Supplement = new CharacterRange(0x00A0, 0x00FF);

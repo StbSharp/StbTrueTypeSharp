@@ -3,7 +3,12 @@ using System.Collections.Generic;
 
 namespace StbTrueTypeSharp
 {
-	public class FontBakerResult
+#if !STBSHARP_INTERNAL
+	public
+#else
+	internal
+#endif
+	class FontBakerResult
 	{
 		public FontBakerResult(Dictionary<int, GlyphInfo> glyphs, byte[] bitmap, int width, int height)
 		{

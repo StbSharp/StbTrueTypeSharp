@@ -1,6 +1,11 @@
 ﻿namespace StbTrueTypeSharp
 {
-	public static unsafe partial class StbTrueType
+#if !STBSHARP_INTERNAL
+	public
+#else
+	internal
+#endif
+	static unsafe partial class StbTrueType
 	{
 		public static uint stbtt__find_table(byte* data, uint fontstart, string tag)
 		{

@@ -4,7 +4,12 @@ using System.Linq;
 
 namespace StbTrueTypeSharp
 {
-	public unsafe class FontBaker
+#if !STBSHARP_INTERNAL
+	public
+#else
+	internal
+#endif
+	unsafe class FontBaker
 	{
 		private byte[] _bitmap;
 		private StbTrueType.stbtt_pack_context _context;
