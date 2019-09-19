@@ -19,5 +19,8 @@ There are two ways of referencing StbTrueTypeSharp in the project:
 # License
 Public Domain
 
+# Who uses it?
+https://github.com/rds1983/SpriteFontPlus
+
 ## Credits
 * [stb](https://github.com/nothings/stb)
