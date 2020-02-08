@@ -1,15 +1,11 @@
-﻿using System;
+﻿using StbTrueTypeSharp;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace StbTrueTypeSharp
+namespace StbSharp.MonoGame.Test
 {
-#if !STBSHARP_INTERNAL
-	public
-#else
-	internal
-#endif
-	unsafe class FontBaker
+	public unsafe class FontBaker
 	{
 		private byte[] _bitmap;
 		private StbTrueType.stbtt_pack_context _context;
