@@ -9,32 +9,22 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "StbSharp", "StbSharp", "{31
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StbTrueTypeSharp", "src\StbTrueTypeSharp\StbTrueTypeSharp.csproj", "{EC51229C-4DA6-4F17-AEFB-71166ED15036}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StbTrueTypeSharp.MonoGame.Test", "samples\StbTrueTypeSharp.MonoGame.Test\StbTrueTypeSharp.MonoGame.Test.csproj", "{5528B473-7EEA-43EF-8DE2-6338C5F157D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StbTrueTypeSharp.MonoGame.Test", "samples\StbTrueTypeSharp.MonoGame.Test\StbTrueTypeSharp.MonoGame.Test.csproj", "{5528B473-7EEA-43EF-8DE2-6338C5F157D2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
-		Debug|Mixed Platforms = Debug|Mixed Platforms
 		Release|Any CPU = Release|Any CPU
-		Release|Mixed Platforms = Release|Mixed Platforms
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{EC51229C-4DA6-4F17-AEFB-71166ED15036}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EC51229C-4DA6-4F17-AEFB-71166ED15036}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EC51229C-4DA6-4F17-AEFB-71166ED15036}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{EC51229C-4DA6-4F17-AEFB-71166ED15036}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
 		{EC51229C-4DA6-4F17-AEFB-71166ED15036}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EC51229C-4DA6-4F17-AEFB-71166ED15036}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EC51229C-4DA6-4F17-AEFB-71166ED15036}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{EC51229C-4DA6-4F17-AEFB-71166ED15036}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{5528B473-7EEA-43EF-8DE2-6338C5F157D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5528B473-7EEA-43EF-8DE2-6338C5F157D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5528B473-7EEA-43EF-8DE2-6338C5F157D2}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{5528B473-7EEA-43EF-8DE2-6338C5F157D2}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
 		{5528B473-7EEA-43EF-8DE2-6338C5F157D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5528B473-7EEA-43EF-8DE2-6338C5F157D2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5528B473-7EEA-43EF-8DE2-6338C5F157D2}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{5528B473-7EEA-43EF-8DE2-6338C5F157D2}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
