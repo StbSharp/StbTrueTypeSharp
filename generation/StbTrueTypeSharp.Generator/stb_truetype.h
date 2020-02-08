@@ -452,13 +452,13 @@ int main(int arg, char **argv)
    // #define your own functions "STBTT_malloc" / "STBTT_free" to avoid malloc.h
    #ifndef STBTT_malloc
    #include <stdlib.h>
-   #define STBTT_malloc(x, u)  malloc(x)
-   #define STBTT_free(x, u)    free(x)
+   #define STBTT_malloc(x,u)  ((void)(u),malloc(x))
+   #define STBTT_free(x,u)    ((void)(u),free(x))
    #endif
 
    #ifndef STBTT_assert
    #include <assert.h>
-   #define STBTT_assert(x)
+   #define STBTT_assert(x)    assert(x)
    #endif
 
    #ifndef STBTT_strlen
@@ -1086,9 +1086,9 @@ typedef int stbtt__test_oversample_pow2[(STBTT_MAX_OVERSAMPLE & (STBTT_MAX_OVERS
 #endif
 
 #ifdef _MSC_VER
-#define STBTT__NOTUSED(v)
+#define STBTT__NOTUSED(v)  (void)(v)
 #else
-#define STBTT__NOTUSED(v)
+#define STBTT__NOTUSED(v)  (void)sizeof(v)
 #endif
 
 //////////////////////////////////////////////////////////////////////////
@@ -2017,17 +2017,15 @@ static int stbtt__run_charstring(const stbtt_fontinfo *info, int glyph_index, st
       // starting from a different place.
 
       case 0x07: // vlineto
+         if (sp < 1) return STBTT__CSERR("vlineto stack");
+         goto vlineto;
       case 0x06: // hlineto
-         if (sp < 1) return STBTT__CSERR("vline/hlineto stack");
-         int goto_vlineto = b0 == 0x07?1:0;
+         if (sp < 1) return STBTT__CSERR("hlineto stack");
          for (;;) {
-            if (goto_vlineto == 0)
-            {
-                if (i >= sp) break;
-                stbtt__csctx_rline_to(c, s[i], 0);
-                i++;
-            }
-            goto_vlineto = 0;
+            if (i >= sp) break;
+            stbtt__csctx_rline_to(c, s[i], 0);
+            i++;
+      vlineto:
             if (i >= sp) break;
             stbtt__csctx_rline_to(c, 0, s[i]);
             i++;
@@ -2035,17 +2033,15 @@ static int stbtt__run_charstring(const stbtt_fontinfo *info, int glyph_index, st
          break;
 
       case 0x1F: // hvcurveto
+         if (sp < 4) return STBTT__CSERR("hvcurveto stack");
+         goto hvcurveto;
       case 0x1E: // vhcurveto
-         if (sp < 4) return STBTT__CSERR("hvcurveto/vhcurveto stack");
-         int goto_hvcurveto = b0 == 0x1F?1:0;
+         if (sp < 4) return STBTT__CSERR("vhcurveto stack");
          for (;;) {
-            if (goto_hvcurveto == 0)
-            {
-                if (i + 3 >= sp) break;
-                stbtt__csctx_rccurve_to(c, 0, s[i], s[i + 1], s[i + 2], s[i + 3], (sp - i == 5) ? s[i + 4] : 0.0f);
-                i += 4;
-            }
-            goto_hvcurveto = 0;
+            if (i + 3 >= sp) break;
+            stbtt__csctx_rccurve_to(c, 0, s[i], s[i+1], s[i+2], s[i+3], (sp - i == 5) ? s[i + 4] : 0.0f);
+            i += 4;
+      hvcurveto:
             if (i + 3 >= sp) break;
             stbtt__csctx_rccurve_to(c, s[i], 0, s[i+1], s[i+2], (sp - i == 5) ? s[i+4] : 0.0f, s[i+3]);
             i += 4;
@@ -2089,15 +2085,13 @@ static int stbtt__run_charstring(const stbtt_fontinfo *info, int glyph_index, st
          break;
 
       case 0x0A: // callsubr
-      case 0x1D: // callgsubr
-         if (b0 == 0x0A)
-         {
-             if (!has_subrs) {
-                 if (info->fdselect.size)
-                     subrs = stbtt__cid_get_glyph_subrs(info, glyph_index);
-                 has_subrs = 1;
-             }
+         if (!has_subrs) {
+            if (info->fdselect.size)
+               subrs = stbtt__cid_get_glyph_subrs(info, glyph_index);
+            has_subrs = 1;
          }
+         // fallthrough
+      case 0x1D: // callgsubr
          if (sp < 1) return STBTT__CSERR("call(g|)subr stack");
          v = (int) s[--sp];
          if (subr_stack_height >= 10) return STBTT__CSERR("recursion limit");
@@ -2226,9 +2220,8 @@ static int stbtt__run_charstring(const stbtt_fontinfo *info, int glyph_index, st
 static int stbtt__GetGlyphShapeT2(const stbtt_fontinfo *info, int glyph_index, stbtt_vertex **pvertices)
 {
    // runs the charstring twice, once to count and once to output (to avoid realloc)
-   stbtt__csctx count_ctx;
-   count_ctx.bounds = 1;
-   stbtt__csctx output_ctx;
+   stbtt__csctx count_ctx = STBTT__CSCTX_INIT(1);
+   stbtt__csctx output_ctx = STBTT__CSCTX_INIT(0);
    if (stbtt__run_charstring(info, glyph_index, &count_ctx)) {
       *pvertices = (stbtt_vertex*)STBTT_malloc(count_ctx.num_vertices*sizeof(stbtt_vertex), info->userdata);
       output_ctx.pvertices = *pvertices;
@@ -2243,8 +2236,7 @@ static int stbtt__GetGlyphShapeT2(const stbtt_fontinfo *info, int glyph_index, s
 
 static int stbtt__GetGlyphInfoT2(const stbtt_fontinfo *info, int glyph_index, int *x0, int *y0, int *x1, int *y1)
 {
-   stbtt__csctx c;
-   c.bounds = 1;   
+   stbtt__csctx c = STBTT__CSCTX_INIT(1);
    int r = stbtt__run_charstring(info, glyph_index, &c);
    if (x0)  *x0 = r ? c.min_x : 0;
    if (y0)  *y0 = r ? c.min_y : 0;
@@ -2820,7 +2812,7 @@ static void stbtt__fill_active_edges(unsigned char *scanline, int len, stbtt__ac
 
 static void stbtt__rasterize_sorted_edges(stbtt__bitmap *result, stbtt__edge *e, int n, int vsubsample, int off_x, int off_y, void *userdata)
 {
-   stbtt__hheap hh;
+   stbtt__hheap hh = { 0, 0, 0 };
    stbtt__active_edge *active = NULL;
    int y,j=0;
    int max_weight = (255 / vsubsample);  // weight per vertical scanline
@@ -2939,33 +2931,20 @@ static void stbtt__handle_clipped_edge(float *scanline, int x, stbtt__active_edg
    }
 
    if (x0 == x)
-   {
-       STBTT_assert(x1 <= x + 1);
-   }
-   else if (x0 == x + 1)
-   {
-       STBTT_assert(x1 >= x);
-   }
+      STBTT_assert(x1 <= x+1);
+   else if (x0 == x+1)
+      STBTT_assert(x1 >= x);
    else if (x0 <= x)
-   {
-       STBTT_assert(x1 <= x);
-   }
-   else if (x0 >= x + 1)
-   {
-       STBTT_assert(x1 >= x + 1);
-   }
+      STBTT_assert(x1 <= x);
+   else if (x0 >= x+1)
+      STBTT_assert(x1 >= x+1);
    else
-   {
-       STBTT_assert(x1 >= x && x1 <= x + 1);
-   }
+      STBTT_assert(x1 >= x && x1 <= x+1);
 
    if (x0 <= x && x1 <= x)
-   {
-       scanline[x] += e->direction * (y1 - y0);
-   }
-   else if (x0 >= x + 1 && x1 >= x + 1)
-   {
-   }
+      scanline[x] += e->direction * (y1-y0);
+   else if (x0 >= x+1 && x1 >= x+1)
+      ;
    else {
       STBTT_assert(x0 >= x && x0 <= x+1 && x1 >= x && x1 <= x+1);
       scanline[x] += e->direction * (y1-y0) * (1-((x0-x)+(x1-x))/2); // coverage = 1 - average x position
@@ -3039,11 +3018,11 @@ static void stbtt__fill_active_edges_new(float *scanline, float *scanline_fill, 
                   float t;
                   sy0 = y_bottom - (sy0 - y_top);
                   sy1 = y_bottom - (sy1 - y_top);
-                  t = sy0; sy0 = sy1; sy1 = t;
-                  t = x_bottom; x_bottom = x_top; x_top = t;
+                  t = sy0, sy0 = sy1, sy1 = t;
+                  t = x_bottom, x_bottom = x_top, x_top = t;
                   dx = -dx;
                   dy = -dy;
-                  t = x0; x0 = xb; xb = t;
+                  t = x0, x0 = xb, xb = t;
                }
 
                x1 = (int) x_top;
@@ -3289,10 +3268,10 @@ static void stbtt__sort_edges_quicksort(stbtt__edge *p, int n)
       for(;;) {
          /* handling of equality is crucial here */
          /* for sentinels & efficiency with duplicates */
-         for (i=i;;++i) {
+         for (;;++i) {
             if (!STBTT__COMPARE(&p[i], &p[0])) break;
          }
-         for (j=j;;--j) {
+         for (;;--j) {
             if (!STBTT__COMPARE(&p[0], &p[j])) break;
          }
          /* make sure we haven't crossed */
@@ -3362,10 +3341,9 @@ static void stbtt__rasterize(stbtt__bitmap *result, stbtt__point *pts, int *wcou
             continue;
          // add edge from j to k to the list
          e[n].invert = 0;
-         if ((invert && p[j].y > p[k].y) ||
-             (!invert && p[j].y < p[k].y)) {
-             e[n].invert = 1;
-             a = j; b = k;
+         if (invert ? p[j].y > p[k].y : p[j].y < p[k].y) {
+            e[n].invert = 1;
+            a=j,b=k;
          }
          e[n].x0 = p[a].x * scale_x + shift_x;
          e[n].y0 = (p[a].y * y_scale_inv + shift_y) * vsubsample;
@@ -3497,11 +3475,11 @@ static stbtt__point *stbtt_FlattenCurves(stbtt_vertex *vertices, int num_verts, 
                ++n;
                start = num_points;
 
-               x = vertices[i].x; y = vertices[i].y;
+               x = vertices[i].x, y = vertices[i].y;
                stbtt__add_point(points, num_points++, x,y);
                break;
             case STBTT_vline:
-               x = vertices[i].x; y = vertices[i].y;
+               x = vertices[i].x, y = vertices[i].y;
                stbtt__add_point(points, num_points++, x, y);
                break;
             case STBTT_vcurve:
@@ -3509,7 +3487,7 @@ static stbtt__point *stbtt_FlattenCurves(stbtt_vertex *vertices, int num_verts, 
                                         vertices[i].cx, vertices[i].cy,
                                         vertices[i].x,  vertices[i].y,
                                         objspace_flatness_squared, 0);
-               x = vertices[i].x; y = vertices[i].y;
+               x = vertices[i].x, y = vertices[i].y;
                break;
             case STBTT_vcubic:
                stbtt__tesselate_cubic(points, &num_points, x,y,
@@ -3517,7 +3495,7 @@ static stbtt__point *stbtt_FlattenCurves(stbtt_vertex *vertices, int num_verts, 
                                         vertices[i].cx1, vertices[i].cy1,
                                         vertices[i].x,  vertices[i].y,
                                         objspace_flatness_squared, 0);
-               x = vertices[i].x; y = vertices[i].y;
+               x = vertices[i].x, y = vertices[i].y;
                break;
          }
       }
@@ -3677,9 +3655,7 @@ static int stbtt_BakeFontBitmap_internal(unsigned char *data, int offset,  // fo
       gw = x1-x0;
       gh = y1-y0;
       if (x + gw + 1 >= pw)
-      {
-          y = bottom_y; x = 1; // advance to next row
-      }
+         y = bottom_y, x = 1; // advance to next row
       if (y + gh + 1 >= ph) // check if it fits vertically AFTER potentially moving to next row
          return -i;
       STBTT_assert(x+gw < pw);
@@ -4228,7 +4204,7 @@ STBTT_DEF void stbtt_GetPackedQuad(const stbtt_packedchar *chardata, int pw, int
 #define STBTT_min(a,b)  ((a) < (b) ? (a) : (b))
 #define STBTT_max(a,b)  ((a) < (b) ? (b) : (a))
 
-static int stbtt__ray_intersect_bezier(float orig[2], float ray[2], float q0[2], float q1[2], float q2[2], float hits[4])
+static int stbtt__ray_intersect_bezier(float orig[2], float ray[2], float q0[2], float q1[2], float q2[2], float hits[2][2])
 {
    float q0perp = q0[1]*ray[0] - q0[0]*ray[1];
    float q1perp = q1[1]*ray[0] - q1[0]*ray[1];
@@ -4239,7 +4215,7 @@ static int stbtt__ray_intersect_bezier(float orig[2], float ray[2], float q0[2],
    float b = q1perp - q0perp;
    float c = q0perp - roperp;
 
-   float s0 = 0, s1 = 0;
+   float s0 = 0., s1 = 0.;
    int num_s = 0;
 
    if (a != 0.0) {
@@ -4279,12 +4255,12 @@ static int stbtt__ray_intersect_bezier(float orig[2], float ray[2], float q0[2],
       float q20d = q2d - q0d;
       float q0rd = q0d - rod;
 
-      hits[0] = q0rd + s0*(2.0f - 2.0f*s0)*q10d + s0*s0*q20d;
-      hits[1] = a*s0+b;
+      hits[0][0] = q0rd + s0*(2.0f - 2.0f*s0)*q10d + s0*s0*q20d;
+      hits[0][1] = a*s0+b;
 
       if (num_s > 1) {
-         hits[2] = q0rd + s1*(2.0f - 2.0f*s1)*q10d + s1*s1*q20d;
-         hits[3] = a*s1+b;
+         hits[1][0] = q0rd + s1*(2.0f - 2.0f*s1)*q10d + s1*s1*q20d;
+         hits[1][1] = a*s1+b;
          return 2;
       } else {
          return 1;
@@ -4334,7 +4310,7 @@ static int stbtt__compute_crossings_x(float x, float y, int nverts, stbtt_vertex
          int by = STBTT_max(y0,STBTT_max(y1,y2));
          if (y > ay && y < by && x > ax) {
             float q0[2],q1[2],q2[2];
-            float hits[4];
+            float hits[2][2];
             q0[0] = (float)x0;
             q0[1] = (float)y0;
             q1[0] = (float)x1;
@@ -4354,11 +4330,11 @@ static int stbtt__compute_crossings_x(float x, float y, int nverts, stbtt_vertex
             } else {
                int num_hits = stbtt__ray_intersect_bezier(orig, ray, q0, q1, q2, hits);
                if (num_hits >= 1)
-                  if (hits[0] < 0)
-                     winding += (hits[1] < 0 ? -1 : 1);
+                  if (hits[0][0] < 0)
+                     winding += (hits[0][1] < 0 ? -1 : 1);
                if (num_hits >= 2)
-                  if (hits[2] < 0)
-                     winding += (hits[3] < 0 ? -1 : 1);
+                  if (hits[1][0] < 0)
+                     winding += (hits[1][1] < 0 ? -1 : 1);
             }
          } 
       }
@@ -4550,7 +4526,7 @@ STBTT_DEF unsigned char * stbtt_GetGlyphSDF(const stbtt_fontinfo *info, float sc
                         num = stbtt__solve_cubic(b, c, d, res);
                      }
                      if (num >= 1 && res[0] >= 0.0f && res[0] <= 1.0f) {
-                        t = res[0]; it = 1.0f - t;
+                        t = res[0], it = 1.0f - t;
                         px = it*it*x0 + 2*t*it*x1 + t*t*x2;
                         py = it*it*y0 + 2*t*it*y1 + t*t*y2;
                         dist2 = (px-sx)*(px-sx) + (py-sy)*(py-sy);
@@ -4558,7 +4534,7 @@ STBTT_DEF unsigned char * stbtt_GetGlyphSDF(const stbtt_fontinfo *info, float sc
                            min_dist = (float) STBTT_sqrt(dist2);
                      }
                      if (num >= 2 && res[1] >= 0.0f && res[1] <= 1.0f) {
-                        t = res[1]; it = 1.0f - t;
+                        t = res[1], it = 1.0f - t;
                         px = it*it*x0 + 2*t*it*x1 + t*t*x2;
                         py = it*it*y0 + 2*t*it*y1 + t*t*y2;
                         dist2 = (px-sx)*(px-sx) + (py-sy)*(py-sy);
@@ -4566,7 +4542,7 @@ STBTT_DEF unsigned char * stbtt_GetGlyphSDF(const stbtt_fontinfo *info, float sc
                            min_dist = (float) STBTT_sqrt(dist2);
                      }
                      if (num >= 3 && res[2] >= 0.0f && res[2] <= 1.0f) {
-                        t = res[2]; it = 1.0f - t;
+                        t = res[2], it = 1.0f - t;
                         px = it*it*x0 + 2*t*it*x1 + t*t*x2;
                         py = it*it*y0 + 2*t*it*y1 + t*t*y2;
                         dist2 = (px-sx)*(px-sx) + (py-sy)*(py-sy);
