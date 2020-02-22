@@ -78,7 +78,7 @@ namespace StbSharp.StbTrueType.Generator
 			data = data.Replace("(int)(((a[0]) == (b[0])) && ((a[1]) == (b[1])));",
 				"(int)(((a[0] == b[0]) && (a[1] == b[1]))?1:0);");
 
-			File.WriteAllText(@"..\..\..\..\..\src\StbTrueTypeSharp\StbTrueType.Generated.cs", data);
+			File.WriteAllText(@"..\..\..\..\..\src\StbTrueType.Generated.cs", data);
 		}
 
 		static void Main(string[] args)
