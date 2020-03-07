@@ -2089,7 +2089,7 @@ static int stbtt__run_charstring(const stbtt_fontinfo *info, int glyph_index, st
                 stbtt__csctx_rccurve_to(c, 0, s[i], s[i + 1], s[i + 2], s[i + 3], (sp - i == 5) ? s[i + 4] : 0.0f);
                 i += 4;
             }
-            goto_hvcurveto = 0
+            goto_hvcurveto = 0;
             if (i + 3 >= sp) break;
             stbtt__csctx_rccurve_to(c, s[i], 0, s[i+1], s[i+2], (sp - i == 5) ? s[i+4] : 0.0f, s[i+3]);
             i += 4;

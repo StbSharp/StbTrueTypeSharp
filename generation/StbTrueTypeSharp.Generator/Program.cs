@@ -6,7 +6,7 @@ using Sichem;
 
 namespace StbSharp.StbTrueType.Generator
 {
-	class Program
+	static class Program
 	{
 		private static readonly Dictionary<string, string[]> _outputs = new Dictionary<string, string[]>
 		{
@@ -14,11 +14,19 @@ namespace StbSharp.StbTrueType.Generator
 			{
 				"stbtt__handle_clipped_edge",
 				"stbtt__rasterize_sorted_edges",
-				"stbtt__bitmap"
+				"stbtt__fill_active_edges_new",
+				"stbtt__sort_edges_ins_sort",
+				"stbtt__sort_edges_quicksort",
+				"stbtt__sort_edges",
+				"stbtt__bitmap",
+				"stbtt__edge",
+				"stbtt__active_edge",
 			},
 			["Buf"] = new string[]
 			{
-				"stbtt__buf"
+				"stbtt__buf",
+				"stbtt__new_buf",
+
 			},
 			["CharString"] = new string[]
 			{
@@ -26,14 +34,31 @@ namespace StbSharp.StbTrueType.Generator
 			},
 			["FontInfo"] = new string[]
 			{
-				"stbtt_fontinfo"
+				"stbtt_fontinfo",
+				"stbtt__close_shape",
+				"stbtt__GetCoverageIndex",
+				"stbtt__GetGlyphClass",
+				"stbtt_kerningentry",
 			},
 			["RectPack"] = new string[]
 			{
 				"stbrp_context",
 				"stbtt_pack_context",
+				"stbtt_pack_range",
+				"stbrp_node",
+				"stbrp_rect",
+			},
+			["Heap"] = new string[]
+			{
+				"stbtt__hheap",
+				"stbtt__hheap_chunk"
 			}
 		};
+
+		private static bool OwnedByClass(this string value, string cls)
+		{
+			return value.Contains("(" + cls + " ") || value.Contains("(" + cls + "*");
+		}
 
 		private static void Write(Dictionary<string, string> input, Dictionary<string, string> output)
 		{
@@ -56,26 +81,30 @@ namespace StbSharp.StbTrueType.Generator
 
 				if (outputKey == null)
 				{
-					if (pair.Value.Contains("(stbtt__bitmap "))
+					if (pair.Value.OwnedByClass("stbtt__bitmap"))
 					{
 						outputKey = "Bitmap";
 					}
-					else if (pair.Value.Contains("(stbtt__buf "))
+					else if (pair.Value.OwnedByClass("stbtt__buf"))
 					{
 						outputKey = "Buf";
 					}
-					else if (pair.Value.Contains("(stbtt__csctx "))
+					else if (pair.Value.OwnedByClass("stbtt__csctx"))
 					{
 						outputKey = "CharString";
 					}
-					else if (pair.Value.Contains("(stbtt_fontinfo "))
+					else if (pair.Value.OwnedByClass("stbtt_fontinfo"))
 					{
 						outputKey = "FontInfo";
 					}
-					else if (pair.Value.Contains("(stbrp_context ") ||
-						pair.Value.Contains("(stbtt_pack_context "))
+					else if (pair.Value.OwnedByClass("stbrp_context") ||
+						pair.Value.OwnedByClass("stbtt_pack_context"))
 					{
 						outputKey = "RectPack";
+					}
+					else if (pair.Value.OwnedByClass("stbtt__hheap"))
+					{
+						outputKey = "Heap";
 					}
 				}
 
@@ -125,6 +154,8 @@ namespace StbSharp.StbTrueType.Generator
 			data = data.Replace("sizeof((*rects))", "sizeof(stbrp_rect)");
 			data = data.Replace("(int)(((a[0]) == (b[0])) && ((a[1]) == (b[1])));",
 				"(int)(((a[0] == b[0]) && (a[1] == b[1]))?1:0);");
+			data = data.Replace("stbtt__hheap hh = (stbtt__hheap)({ null, null, 0 })",
+				"stbtt__hheap hh = new stbtt__hheap()");
 
 			return data;
 		}
@@ -192,7 +223,9 @@ namespace StbSharp.StbTrueType.Generator
 				data = sb.ToString() + data;
 				data += "}\n}";
 
-				File.WriteAllText(@"..\..\..\..\..\src\StbTrueType.Generated." + pair.Key + ".cs", data);
+				var fileName = @"..\..\..\..\..\src\StbTrueType.Generated." + pair.Key + ".cs";
+				Logger.Info("Writing {0}", fileName);
+				File.WriteAllText(fileName, data);
 			}
 		}
 
