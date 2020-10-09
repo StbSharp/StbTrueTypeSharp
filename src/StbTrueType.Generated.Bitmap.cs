@@ -371,12 +371,12 @@ namespace StbTrueTypeSharp
 				j = (int)(n - 1);
 				for (; ; )
 				{
-					for (i = (int)(i); ; ++i)
+					for (; ; ++i)
 					{
 						if (!(((&p[i])->y0) < ((&p[0])->y0)))
 							break;
 					}
-					for (j = (int)(j); ; --j)
+					for (; ; --j)
 					{
 						if (!(((&p[0])->y0) < ((&p[j])->y0)))
 							break;
