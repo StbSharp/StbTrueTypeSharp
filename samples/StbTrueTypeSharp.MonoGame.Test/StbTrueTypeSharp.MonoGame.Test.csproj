@@ -10,7 +10,6 @@
     <AssemblyName>StbTrueTypeSharp.MonoGame.Test</AssemblyName>
     <RootNamespace>StbTrueTypeSharp</RootNamespace>
     <Version>1.0.0.0</Version>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <ApplicationIcon />
     <OutputType>WinExe</OutputType>

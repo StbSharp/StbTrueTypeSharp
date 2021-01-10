@@ -2,15 +2,17 @@
   <PropertyGroup>
     <Authors>StbTrueTypeSharpTeam</Authors>
     <Product>StbTrueTypeSharp</Product>
-    <TargetFramework>netstandard1.1</TargetFramework>
+    <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
     <Description>C# port of stb_truetype.h</Description>
     <PackageLicense>https://github.com/rds1983/StbSharp#license</PackageLicense>
     <PackageProjectUrl>https://github.com/rds1983/StbSharp</PackageProjectUrl>
     <NoWarn>NU1701</NoWarn>
     <AssemblyName>StbTrueTypeSharp</AssemblyName>
     <RootNamespace>StbTrueTypeSharp</RootNamespace>
-    <Version>1.0.0.0</Version>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>1.24.7</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 </Project>
