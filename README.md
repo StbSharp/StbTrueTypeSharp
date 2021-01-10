@@ -1,6 +1,5 @@
 # StbTrueTypeSharp
-[![NuGet](https://img.shields.io/nuget/v/StbTrueTypeSharp.svg)](https://www.nuget.org/packages/StbTrueTypeSharp/) [![Build status](https://ci.appveyor.com/api/projects/status/isyfkbfakrhoa1bm?svg=true)](https://ci.appveyor.com/project/RomanShapiro/stbtruetypesharp)
-
+[![NuGet](https://img.shields.io/nuget/v/StbTrueTypeSharp.svg)](https://www.nuget.org/packages/StbTrueTypeSharp/) ![Build & Publish](https://github.com/StbSharp/StbTrueTypeSharp/workflows/Build%20&%20Publish/badge.svg)
 C# port of stb_truetype.h
 
 # Adding Reference
