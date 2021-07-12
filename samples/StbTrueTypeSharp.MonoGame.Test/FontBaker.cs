@@ -42,52 +42,48 @@ namespace StbSharp.MonoGame.Test
 			if (!characterRanges.Any())
 				throw new ArgumentException("characterRanges must have a least one value.");
 
-			fixed (byte* ttfPtr = ttf)
+			var fontInfo = StbTrueType.CreateFont(ttf, 0);
+			if (fontInfo == null)
+				throw new Exception("Failed to init font.");
+
+			var scaleFactor = StbTrueType.stbtt_ScaleForPixelHeight(fontInfo, fontPixelHeight);
+
+			int ascent, descent, lineGap;
+			StbTrueType.stbtt_GetFontVMetrics(fontInfo, &ascent, &descent, &lineGap);
+
+			foreach (var range in characterRanges)
 			{
-				var fontInfo = new StbTrueType.stbtt_fontinfo();
-				if (StbTrueType.stbtt_InitFont(fontInfo, ttfPtr, 0) == 0)
-					throw new Exception("Failed to init font.");
+				if (range.Start > range.End)
+					continue;
 
-				var scaleFactor = StbTrueType.stbtt_ScaleForPixelHeight(fontInfo, fontPixelHeight);
-
-				int ascent, descent, lineGap;
-				StbTrueType.stbtt_GetFontVMetrics(fontInfo, &ascent, &descent, &lineGap);
-
-				foreach (var range in characterRanges)
+				var cd = new StbTrueType.stbtt_packedchar[range.End - range.Start + 1];
+				fixed (StbTrueType.stbtt_packedchar* chardataPtr = cd)
 				{
-					if (range.Start > range.End)
-						continue;
+					StbTrueType.stbtt_PackFontRange(_context, fontInfo.data, 0, fontPixelHeight,
+						range.Start,
+						range.End - range.Start + 1,
+						chardataPtr);
+				}
 
-					var cd = new StbTrueType.stbtt_packedchar[range.End - range.Start + 1];
-					fixed (StbTrueType.stbtt_packedchar* chardataPtr = cd)
+				for (var i = 0; i < cd.Length; ++i)
+				{
+					var yOff = cd[i].yoff;
+					yOff += ascent * scaleFactor;
+
+					var glyphInfo = new GlyphInfo
 					{
-						StbTrueType.stbtt_PackFontRange(_context, ttfPtr, 0, fontPixelHeight,
-							range.Start,
-							range.End - range.Start + 1,
-							chardataPtr);
-					}
+						X = cd[i].x0,
+						Y = cd[i].y0,
+						Width = cd[i].x1 - cd[i].x0,
+						Height = cd[i].y1 - cd[i].y0,
+						XOffset = (int)cd[i].xoff,
+						YOffset = (int)Math.Round(yOff),
+						XAdvance = (int)Math.Round(cd[i].xadvance)
+					};
 
-					for (var i = 0; i < cd.Length; ++i)
-					{
-						var yOff = cd[i].yoff;
-						yOff += ascent * scaleFactor;
-
-						var glyphInfo = new GlyphInfo
-						{
-							X = cd[i].x0,
-							Y = cd[i].y0,
-							Width = cd[i].x1 - cd[i].x0,
-							Height = cd[i].y1 - cd[i].y0,
-							XOffset = (int)cd[i].xoff,
-							YOffset = (int)Math.Round(yOff),
-							XAdvance = (int)Math.Round(cd[i].xadvance)
-						};
-
-						_glyphs[i + range.Start] = glyphInfo;
-					}
+					_glyphs[i + range.Start] = glyphInfo;
 				}
 			}
-
 		}
 
 		public FontBakerResult End()

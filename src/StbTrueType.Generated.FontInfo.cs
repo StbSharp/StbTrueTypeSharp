@@ -7,30 +7,6 @@ namespace StbTrueTypeSharp
 {
 	unsafe partial class StbTrueType
 	{
-		public class stbtt_fontinfo
-		{
-			public stbtt__buf cff;
-			public stbtt__buf charstrings;
-			public byte* data;
-			public stbtt__buf fdselect;
-			public stbtt__buf fontdicts;
-			public int fontstart;
-			public int glyf;
-			public int gpos;
-			public stbtt__buf gsubrs;
-			public int head;
-			public int hhea;
-			public int hmtx;
-			public int index_map;
-			public int indexToLocFormat;
-			public int kern;
-			public int loca;
-			public int numGlyphs;
-			public stbtt__buf subrs;
-			public int svg;
-			public void* userdata;
-		}
-
 		[StructLayout(LayoutKind.Sequential)]
 		public struct stbtt_kerningentry
 		{
@@ -59,7 +35,7 @@ namespace StbTrueTypeSharp
 			return info.svg;
 		}
 
-		public static int stbtt_InitFont_internal(stbtt_fontinfo info, byte* data, int fontstart)
+		internal static int stbtt_InitFont_internal(stbtt_fontinfo info, byte* data, int fontstart)
 		{
 			uint cmap = 0;
 			uint t = 0;
@@ -1905,7 +1881,7 @@ namespace StbTrueTypeSharp
 			return null;
 		}
 
-		public static int stbtt_InitFont(stbtt_fontinfo info, byte* data, int offset)
+		internal static int stbtt_InitFont(stbtt_fontinfo info, byte* data, int offset)
 		{
 			return stbtt_InitFont_internal(info, data, offset);
 		}

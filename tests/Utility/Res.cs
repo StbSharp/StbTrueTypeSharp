@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Reflection;
 
-namespace StbImageSharp.Tests.Utility
+namespace StbTrueTypeSharp.Tests.Utility
 {
 	/// <summary>
 	/// Resource utility

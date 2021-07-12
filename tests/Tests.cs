@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using StbTrueTypeSharp.Tests.Utility;
 using System;
 using System.IO;
 using System.Reflection;
@@ -18,14 +19,21 @@ namespace StbTrueTypeSharp.Tests
 		public void TestNoIndexMap()
 		{
 			var ttfData = File.ReadAllBytes(@"C:\Windows\Fonts\webdings.ttf");
-			var fontInfo = new stbtt_fontinfo();
 			Assert.Throws<Exception>(() =>
 			{
-				fixed (byte* ttfPtr = ttfData)
-				{
-					stbtt_InitFont(fontInfo, ttfPtr, 0);
-				}
+				var fontInfo = CreateFont(ttfData, 0);
 			});
+		}
+
+		[Test]
+		public void TestCreationAndDispose()
+		{
+			var ttfData = _assembly.ReadResourceAsBytes("DroidSans.ttf");
+			var fontInfo = CreateFont(ttfData, 0);
+			Assert.NotNull(fontInfo);
+			Assert.IsTrue(fontInfo.isDataCopy);
+			fontInfo.Dispose();
+			Assert.IsTrue(fontInfo.data == null);
 		}
 	}
 }
