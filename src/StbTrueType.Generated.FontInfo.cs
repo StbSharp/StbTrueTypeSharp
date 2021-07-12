@@ -155,7 +155,7 @@ namespace StbTrueTypeSharp
 				}
 			}
 			if ((info.index_map) == (0))
-				return (int)(0);
+				throw new Exception("The font does not have a table mapping from unicode codepoints to font indices.");
 			info.indexToLocFormat = (int)(ttUSHORT(data + info.head + 50));
 			return (int)(1);
 		}
