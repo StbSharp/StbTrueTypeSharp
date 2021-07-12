@@ -14,9 +14,11 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: '3.1.x'
+        dotnet-version: '5.0.x'
     - name: Build StbTrueTypeSharp
       run: dotnet build src\StbTrueTypeSharp.csproj --configuration Release
+    - name: Test
+      run: dotnet test StbTrueTypeSharp.sln
     - name: Install NuGet
       uses: NuGet/setup-nuget@v1
     - name: Publish StbTrueTypeSharp to NuGet
