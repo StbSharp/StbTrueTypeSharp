@@ -350,8 +350,6 @@ namespace StbTrueTypeSharp
 								}
 
 								return 0;
-
-								break;
 							}
 
 						default:
