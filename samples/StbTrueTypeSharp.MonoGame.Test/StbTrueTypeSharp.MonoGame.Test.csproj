@@ -1,39 +1,39 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <Authors>StbTrueTypeSharpTeam</Authors>
-    <Product>StbTrueTypeSharp</Product>
-    <TargetFramework>net45</TargetFramework>
-    <Description>C# port of stb_truetype.h</Description>
-    <PackageLicense>https://github.com/rds1983/StbSharp#license</PackageLicense>
-    <PackageProjectUrl>https://github.com/rds1983/StbSharp</PackageProjectUrl>
-    <NoWarn>NU1701</NoWarn>
-    <AssemblyName>StbTrueTypeSharp.MonoGame.Test</AssemblyName>
-    <RootNamespace>StbTrueTypeSharp</RootNamespace>
-    <Version>1.0.0.0</Version>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <ApplicationIcon />
-    <OutputType>WinExe</OutputType>
-    <StartupObject />
-  </PropertyGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\StbTrueTypeSharp.csproj" />
-    <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.7.1.189" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="Fonts\DroidSans.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Fonts\DroidSansJapanese.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Fonts\KoPubBatang-Regular.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Fonts\LICENSE.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Fonts\ZCOOLXiaoWei-Regular.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+    <PropertyGroup>
+        <Authors>StbTrueTypeSharpTeam</Authors>
+        <Product>StbTrueTypeSharp</Product>
+        <TargetFramework>net45</TargetFramework>
+        <Description>C# port of stb_truetype.h</Description>
+        <PackageLicense>https://github.com/rds1983/StbSharp#license</PackageLicense>
+        <PackageProjectUrl>https://github.com/rds1983/StbSharp</PackageProjectUrl>
+        <NoWarn>NU1701</NoWarn>
+        <AssemblyName>StbTrueTypeSharp.MonoGame.Test</AssemblyName>
+        <RootNamespace>StbTrueTypeSharp</RootNamespace>
+        <Version>1.0.0.0</Version>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <ApplicationIcon/>
+        <OutputType>WinExe</OutputType>
+        <StartupObject/>
+    </PropertyGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\StbTrueTypeSharp.csproj"/>
+        <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.7.1.189"/>
+    </ItemGroup>
+    <ItemGroup>
+        <None Update="Fonts\DroidSans.ttf">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Fonts\DroidSansJapanese.ttf">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Fonts\KoPubBatang-Regular.ttf">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Fonts\LICENSE.txt">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Fonts\ZCOOLXiaoWei-Regular.ttf">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
 </Project>

@@ -16,23 +16,11 @@ namespace StbSharp.MonoGame.Test
 		public static readonly CharacterRange HangulCompatibilityJamo = new CharacterRange(0x3130, 0x318f);
 		public static readonly CharacterRange HangulSyllables = new CharacterRange(0xac00, 0xd7af);
 
-		public int Start
-		{
-			get;
-		}
+		public int Start { get; }
 
-		public int End
-		{
-			get;
-		}
+		public int End { get; }
 
-		public int Size
-		{
-			get
-			{
-				return End - Start + 1;
-			}
-		}
+		public int Size => End - Start + 1;
 
 		public CharacterRange(int start, int end)
 		{

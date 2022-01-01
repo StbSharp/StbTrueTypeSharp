@@ -1,20 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-  
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\**\*.*" />
-  </ItemGroup>  
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="NUnit" Version="3.12.0" />
-    <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.0" />
-  </ItemGroup>  
+    <ItemGroup>
+        <EmbeddedResource Include="Resources\**\*.*"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\src\StbTrueTypeSharp.csproj" />
-  </ItemGroup>  
+    <ItemGroup>
+        <PackageReference Include="NUnit" Version="3.12.0"/>
+        <PackageReference Include="NUnit3TestAdapter" Version="3.17.0"/>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.0"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\src\StbTrueTypeSharp.csproj"/>
+    </ItemGroup>
 </Project>

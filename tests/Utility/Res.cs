@@ -4,12 +4,12 @@ using System.Reflection;
 namespace StbTrueTypeSharp.Tests.Utility
 {
 	/// <summary>
-	/// Resource utility
+	///     Resource utility
 	/// </summary>
 	public static class Res
 	{
 		/// <summary>
-		/// Open assembly resource stream by relative name
+		///     Open assembly resource stream by relative name
 		/// </summary>
 		/// <param name="assembly"></param>
 		/// <param name="assetName"></param>
@@ -25,7 +25,7 @@ namespace StbTrueTypeSharp.Tests.Utility
 		}
 
 		/// <summary>
-		/// Reads assembly resource as byte array by relative name
+		///     Reads assembly resource as byte array by relative name
 		/// </summary>
 		/// <param name="assembly"></param>
 		/// <param name="assetName"></param>
@@ -42,7 +42,7 @@ namespace StbTrueTypeSharp.Tests.Utility
 		}
 
 		/// <summary>
-		/// Reads assembly resource as string by relative name
+		///     Reads assembly resource as string by relative name
 		/// </summary>
 		/// <param name="assembly"></param>
 		/// <param name="assetName"></param>

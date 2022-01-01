@@ -1,15 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <Authors>StbTrueTypeSharpTeam</Authors>
-    <Product>StbTrueTypeSharp</Product>
-    <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
-    <Description>C# port of stb_truetype.h</Description>
-    <PackageLicense>https://github.com/rds1983/StbSharp#license</PackageLicense>
-    <PackageProjectUrl>https://github.com/rds1983/StbSharp</PackageProjectUrl>
-    <Version>1.24.8</Version>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)'=='Release'">
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-  </PropertyGroup>
+    <PropertyGroup>
+        <Authors>StbTrueTypeSharpTeam</Authors>
+        <Product>StbTrueTypeSharp</Product>
+        <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
+        <Description>C# port of stb_truetype.h</Description>
+        <PackageLicense>https://github.com/rds1983/StbSharp#license</PackageLicense>
+        <PackageProjectUrl>https://github.com/rds1983/StbSharp</PackageProjectUrl>
+        <Version>1.26.9</Version>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)'=='Release'">
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    </PropertyGroup>
 </Project>

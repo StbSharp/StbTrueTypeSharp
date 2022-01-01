@@ -28,24 +28,12 @@ namespace StbSharp.MonoGame.Test
 			Height = height;
 		}
 
-		public Dictionary<int, GlyphInfo> Glyphs
-		{
-			get;
-		}
+		public Dictionary<int, GlyphInfo> Glyphs { get; }
 
-		public byte[] Bitmap
-		{
-			get;
-		}
+		public byte[] Bitmap { get; }
 
-		public int Width
-		{
-			get;
-		}
+		public int Width { get; }
 
-		public int Height
-		{
-			get;
-		}
+		public int Height { get; }
 	}
 }

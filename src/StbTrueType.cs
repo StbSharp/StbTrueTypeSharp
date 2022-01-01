@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using Hebron.Runtime;
 
 namespace StbTrueTypeSharp
 {
@@ -10,12 +11,11 @@ namespace StbTrueTypeSharp
 #endif
 	static unsafe partial class StbTrueType
 	{
-		public class stbtt_fontinfo: IDisposable
+		public class stbtt_fontinfo : IDisposable
 		{
 			public stbtt__buf cff;
 			public stbtt__buf charstrings;
 			public byte* data = null;
-			public bool isDataCopy;
 			public stbtt__buf fdselect;
 			public stbtt__buf fontdicts;
 			public int fontstart;
@@ -27,12 +27,18 @@ namespace StbTrueTypeSharp
 			public int hmtx;
 			public int index_map;
 			public int indexToLocFormat;
+			public bool isDataCopy;
 			public int kern;
 			public int loca;
 			public int numGlyphs;
 			public stbtt__buf subrs;
 			public int svg;
 			public void* userdata;
+
+			public void Dispose()
+			{
+				Dispose(true);
+			}
 
 			~stbtt_fontinfo()
 			{
@@ -46,11 +52,6 @@ namespace StbTrueTypeSharp
 					CRuntime.free(data);
 					data = null;
 				}
-			}
-
-			public void Dispose()
-			{
-				Dispose(true);
 			}
 		}
 
@@ -91,14 +92,14 @@ namespace StbTrueTypeSharp
 		}
 
 		/// <summary>
-		/// Creates and initializes a font from ttf/otf/ttc data
+		///     Creates and initializes a font from ttf/otf/ttc data
 		/// </summary>
 		/// <param name="data"></param>
 		/// <param name="offset"></param>
 		/// <returns>null if the data was invalid</returns>
 		public static stbtt_fontinfo CreateFont(byte[] data, int offset)
 		{
-			var dataCopy = (byte *)CRuntime.malloc(data.Length);
+			var dataCopy = (byte*)CRuntime.malloc(data.Length);
 			Marshal.Copy(data, 0, new IntPtr(dataCopy), data.Length);
 
 			var info = new stbtt_fontinfo
@@ -114,6 +115,5 @@ namespace StbTrueTypeSharp
 
 			return info;
 		}
-
 	}
 }
