@@ -181,8 +181,7 @@ namespace StbTrueTypeSharp
 						var q0 = stackalloc float[2];
 						var q1 = stackalloc float[2];
 						var q2 = stackalloc float[2];
-						var hitsArray = new UnsafeArray2D<float>(2, 2);
-						var hits = (float**)hitsArray;
+						var hits = stackalloc float[4];
 						q0[0] = x0;
 						q0[1] = y0;
 						q1[0] = x1;
@@ -206,11 +205,11 @@ namespace StbTrueTypeSharp
 						{
 							var num_hits = stbtt__ray_intersect_bezier(orig, ray, q0, q1, q2, hits);
 							if (num_hits >= 1)
-								if (hits[0][0] < 0)
-									winding += hits[0][1] < 0 ? -1 : 1;
+								if (hits[0] < 0)
+									winding += hits[1] < 0 ? -1 : 1;
 							if (num_hits >= 2)
-								if (hits[1][0] < 0)
-									winding += hits[1][1] < 0 ? -1 : 1;
+								if (hits[2] < 0)
+									winding += hits[3] < 0 ? -1 : 1;
 						}
 					}
 				}
@@ -418,7 +417,7 @@ namespace StbTrueTypeSharp
 		}
 
 		public static int stbtt__ray_intersect_bezier(float* orig, float* ray, float* q0, float* q1, float* q2,
-			float** hits)
+			float* hits)
 		{
 			var q0perp = q0[1] * ray[0] - q0[0] * ray[1];
 			var q1perp = q1[1] * ray[0] - q1[0] * ray[1];
@@ -468,12 +467,12 @@ namespace StbTrueTypeSharp
 			var q10d = q1d - q0d;
 			var q20d = q2d - q0d;
 			var q0rd = q0d - rod;
-			hits[0][0] = q0rd + s0 * (2.0f - 2.0f * s0) * q10d + s0 * s0 * q20d;
-			hits[0][1] = a * s0 + b;
+			hits[0] = q0rd + s0 * (2.0f - 2.0f * s0) * q10d + s0 * s0 * q20d;
+			hits[1] = a * s0 + b;
 			if (num_s > 1)
 			{
-				hits[1][0] = q0rd + s1 * (2.0f - 2.0f * s1) * q10d + s1 * s1 * q20d;
-				hits[1][1] = a * s1 + b;
+				hits[2] = q0rd + s1 * (2.0f - 2.0f * s1) * q10d + s1 * s1 * q20d;
+				hits[3] = a * s1 + b;
 				return 2;
 			}
 

@@ -11,6 +11,8 @@ namespace StbTrueTypeSharp
 #endif
 	static unsafe partial class StbTrueType
 	{
+		public static int NativeAllocations => MemoryStats.Allocations;
+
 		public class stbtt_fontinfo : IDisposable
 		{
 			public stbtt__buf cff;

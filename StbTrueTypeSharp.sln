@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StbTrueTypeSharp.MonoGame.T
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StbTrueTypeSharp.Tests", "tests\StbTrueTypeSharp.Tests.csproj", "{5856363B-38D5-4EF2-A383-1F469BD04AD0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OutputString", "samples\OutputString\OutputString.csproj", "{0EDFCA28-FDEB-4AF0-97E6-9F24D694DF97}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,10 @@ Global
 		{5856363B-38D5-4EF2-A383-1F469BD04AD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5856363B-38D5-4EF2-A383-1F469BD04AD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5856363B-38D5-4EF2-A383-1F469BD04AD0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0EDFCA28-FDEB-4AF0-97E6-9F24D694DF97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EDFCA28-FDEB-4AF0-97E6-9F24D694DF97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0EDFCA28-FDEB-4AF0-97E6-9F24D694DF97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EDFCA28-FDEB-4AF0-97E6-9F24D694DF97}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -38,6 +44,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{EC51229C-4DA6-4F17-AEFB-71166ED15036} = {314ACA14-EC1F-4ECF-B902-A3D79850A1B2}
 		{5528B473-7EEA-43EF-8DE2-6338C5F157D2} = {14A355A8-A827-4D09-B3A4-4C7A0EF983EC}
+		{0EDFCA28-FDEB-4AF0-97E6-9F24D694DF97} = {14A355A8-A827-4D09-B3A4-4C7A0EF983EC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C9C812E7-F89A-4B6E-8F9D-981D5F8BBAB3}
