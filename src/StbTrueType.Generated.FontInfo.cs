@@ -1345,7 +1345,7 @@ namespace StbTrueTypeSharp
 				{
 					gbm.stride = gbm.w;
 					stbtt_Rasterize(&gbm, 0.35f, vertices, num_verts, scale_x, scale_y, shift_x, shift_y, ix0, iy0, 1,
-						info.userdata);
+						info.userdata, info.useOldRasterizer);
 				}
 			}
 
@@ -1856,7 +1856,7 @@ namespace StbTrueTypeSharp
 			gbm.stride = out_stride;
 			if (gbm.w != 0 && gbm.h != 0)
 				stbtt_Rasterize(&gbm, 0.35f, vertices, num_verts, scale_x, scale_y, shift_x, shift_y, ix0, iy0, 1,
-					info.userdata);
+					info.userdata, info.useOldRasterizer);
 			CRuntime.free(vertices);
 		}
 

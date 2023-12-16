@@ -11,6 +11,8 @@ namespace StbTrueTypeSharp
 #endif
 	static unsafe partial class StbTrueType
 	{
+		internal static bool usedOldRasterizer = false;
+
 		public static int NativeAllocations => MemoryStats.Allocations;
 
 		public class stbtt_fontinfo : IDisposable
@@ -36,6 +38,7 @@ namespace StbTrueTypeSharp
 			public stbtt__buf subrs;
 			public int svg;
 			public void* userdata;
+			public bool useOldRasterizer;
 
 			public void Dispose()
 			{

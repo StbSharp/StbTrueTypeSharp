@@ -218,7 +218,7 @@ namespace StbTrueTypeSharp
 
 		public static void stbtt__rasterize(stbtt__bitmap* result, stbtt__point* pts, int* wcount, int windings,
 			float scale_x, float scale_y, float shift_x, float shift_y, int off_x, int off_y, int invert,
-			void* userdata)
+			void* userdata, bool useOldRasterizer)
 		{
 			var y_scale_inv = invert != 0 ? -scale_y : scale_y;
 			stbtt__edge* e;
@@ -227,7 +227,13 @@ namespace StbTrueTypeSharp
 			var j = 0;
 			var k = 0;
 			var m = 0;
+
 			var vsubsample = 1;
+			if (useOldRasterizer)
+			{
+				vsubsample = (result->h) < (8) ? 15 : 5;
+			}
+
 			n = 0;
 			for (i = 0; i < windings; ++i) n += wcount[i];
 
@@ -265,13 +271,23 @@ namespace StbTrueTypeSharp
 			}
 
 			stbtt__sort_edges(e, n);
-			stbtt__rasterize_sorted_edges(result, e, n, vsubsample, off_x, off_y, userdata);
+
+			if (!useOldRasterizer)
+			{
+				stbtt__rasterize_sorted_edges(result, e, n, vsubsample, off_x, off_y, userdata);
+			} else
+			{
+				stbtt__rasterize_sorted_edges_old_rasterizer(result, e, n, vsubsample, off_x, off_y, userdata);
+			}
+
 			CRuntime.free(e);
 		}
 
 		public static void stbtt__rasterize_sorted_edges(stbtt__bitmap* result, stbtt__edge* e, int n, int vsubsample,
 			int off_x, int off_y, void* userdata)
 		{
+			usedOldRasterizer = false;
+
 			var hh = new stbtt__hheap();
 			stbtt__active_edge* active = null;
 			var y = 0;
@@ -457,7 +473,7 @@ namespace StbTrueTypeSharp
 
 		public static void stbtt_Rasterize(stbtt__bitmap* result, float flatness_in_pixels, stbtt_vertex* vertices,
 			int num_verts, float scale_x, float scale_y, float shift_x, float shift_y, int x_off, int y_off, int invert,
-			void* userdata)
+			void* userdata, bool useOldRasterizer)
 		{
 			var scale = scale_x > scale_y ? scale_y : scale_x;
 			var winding_count = 0;
@@ -467,7 +483,7 @@ namespace StbTrueTypeSharp
 			if (windings != null)
 			{
 				stbtt__rasterize(result, windings, winding_lengths, winding_count, scale_x, scale_y, shift_x, shift_y,
-					x_off, y_off, (int)invert, userdata);
+					x_off, y_off, (int)invert, userdata, useOldRasterizer);
 				CRuntime.free(winding_lengths);
 				CRuntime.free(windings);
 			}
