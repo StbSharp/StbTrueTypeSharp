@@ -1,4 +1,4 @@
-﻿using Hebron.Runtime;
+﻿using StbTrueTypeSharp.Hebron.Runtime;
 using System.Runtime.InteropServices;
 
 namespace StbTrueTypeSharp
