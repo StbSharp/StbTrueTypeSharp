@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Hebron.Runtime
+namespace StbTrueTypeSharp.Hebron.Runtime
 {
 	internal static unsafe class CRuntime
 	{
