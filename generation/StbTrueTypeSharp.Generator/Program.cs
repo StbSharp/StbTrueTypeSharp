@@ -192,7 +192,7 @@ namespace StbSharp.StbTrueType.Generator
 
 				sb.AppendLine("using System;");
 				sb.AppendLine("using System.Runtime.InteropServices;");
-				sb.AppendLine("using Hebron.Runtime;");
+				sb.AppendLine("using StbTrueTypeSharp.Hebron.Runtime;");
 
 				sb.AppendLine();
 
