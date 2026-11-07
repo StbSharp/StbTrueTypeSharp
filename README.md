@@ -1,3 +1,5 @@
+**Important:** [StbTrueTypeNext](https://github.com/StbSharp/StbTrueTypeNext) is the safe and recommended alternative of this project.
+
 # StbTrueTypeSharp
 [![NuGet](https://img.shields.io/nuget/v/StbTrueTypeSharp.svg)](https://www.nuget.org/packages/StbTrueTypeSharp/) ![Build & Publish](https://github.com/StbSharp/StbTrueTypeSharp/workflows/Build%20&%20Publish/badge.svg) [![Chat](https://img.shields.io/discord/628186029488340992.svg)](https://discord.gg/ZeHxhCY)
 
